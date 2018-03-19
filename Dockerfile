@@ -1,14 +1,16 @@
-FROM ubuntu
-MAINTAINER Kimbro Staken
+FROM cits/oci8:latest
 
-RUN apt-get install -y software-properties-common python
-RUN add-apt-repository ppa:chris-lea/node.js
-RUN echo "deb http://us.archive.ubuntu.com/ubuntu/ precise universe" >> /etc/apt/sources.list
-RUN apt-get update
-RUN apt-get install -y nodejs
-#RUN apt-get install -y nodejs=0.6.12~dfsg1-1ubuntu1
-RUN mkdir /var/www
+RUN cd /tmp \
+	&& curl https://releases.hashicorp.com/consul-template/0.18.5/consul-template_0.18.5_linux_amd64.tgz -o consul-template.tgz \
+	&& gunzip consul-template.tgz \
+	&& tar -xf consul-template.tar \
+	&& mv consul-template /opt/consul-template \
+	&& rm -rf /tmp/consul-template*
 
-ADD app.js /var/www/app.js
+WORKDIR /opt
 
-CMD ["/usr/bin/node", "/var/www/app.js"] 
+CMD /opt/consul-template   -template="$CONSUL_TEMPLATE_URL:/opt/conn.inc.php" -once -consul-addr=$CONSUL_HTTP_ADDR     -vault-addr=$VAULT_ADDR     -vault-token=$VAULT_TOKEN 	-vault-renew-token=false   -log-level=debug  -exec "bash" && php $PHP_SCRIPTNAME
+
+
+
+
