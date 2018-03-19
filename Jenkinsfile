@@ -1,5 +1,7 @@
 node {
 
+def customImage
+
     stage('Clone repository') {
         /* Let's make sure we have the repository cloned to our workspace */
         checkout scm
@@ -9,7 +11,7 @@ node {
         /* This builds the actual image; synonymous to
          * docker build on the command line */
 
-        def customImage = docker.build("ntu-cits/my-test-docker-image")
+        customImage = docker.build("ntu-cits/my-test-docker-image")
     }
 	
 	
@@ -29,8 +31,8 @@ node {
 		/* read section under [Specifying a Docker Label] */
 		
 		docker.withRegistry('localhost:5001') {
-            app.push("${env.BUILD_NUMBER}")		
-            app.push("latest")
+            customImage.push("${env.BUILD_NUMBER}")		
+            customImage.push("latest")
         }
     }
 }
