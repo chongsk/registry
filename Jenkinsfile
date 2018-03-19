@@ -10,7 +10,7 @@ def customImage
         /* This builds the actual image; synonymous to
          * docker build on the command line */
 
-        customImage = docker.build("NTU-CITS/my-image")
+        customImage = docker.build("ntu-cits/my-test-docker-image")
     }
 	
 	
