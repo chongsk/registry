@@ -1,5 +1,4 @@
 node {
-def customImage
 
     stage('Clone repository') {
         /* Let's make sure we have the repository cloned to our workspace */
@@ -10,7 +9,7 @@ def customImage
         /* This builds the actual image; synonymous to
          * docker build on the command line */
 
-        customImage = docker.build("ntu-cits/my-test-docker-image")
+        def customImage = docker.build("ntu-cits/my-test-docker-image")
     }
 	
 	
@@ -30,6 +29,7 @@ def customImage
 		/* read section under [Specifying a Docker Label] */
 		
 		docker.withRegistry('localhost:5001') {
+            app.push("${env.BUILD_NUMBER}")		
             app.push("latest")
         }
     }
