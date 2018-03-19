@@ -30,7 +30,7 @@ def customImage
     stage('Push image') {
 		/* read section under [Specifying a Docker Label] */
 		
-		docker.withRegistry('127.0.0.1:5001') {
+		docker.withRegistry('http://127.0.0.1:5001') {
             customImage.push("${env.BUILD_NUMBER}")		
             customImage.push("latest")
         }
